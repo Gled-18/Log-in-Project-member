@@ -1,0 +1,45 @@
+CREATE DATABASE my_project;
+
+GRANT ALL PRIVILEGES ON my_project.*
+TO 'gledmuca'@'localhost'
+IDENTIFIED BY 'gled1234';
+
+CREATE TABLE user (
+ID int NOT NULL AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+surname VARCHAR(255) NOT NULL,
+username VARCHAR(255) NOT NULL,
+password VARCHAR(100) NOT NULL,
+type ENUM('admin', 'simple'),
+PRIMARY KEY(ID)
+);
+
+CREATE TABLE project (
+ID int NOT NULL AUTO_INCREMENT,
+title VARCHAR(255) NOT NULL,
+category VARCHAR(255) NOT NULL,
+submitted_date DATETIME,
+description VARCHAR(255) NOT NULL,
+PRIMARY KEY(ID)
+);
+
+CREATE TABLE project_member (
+ID int NOT NULL AUTO_INCREMENT,
+project_id int NOT NULL,
+user_id int NOT NULL,
+role ENUM('admin', 'manager', 'tester', 'developer'),
+PRIMARY KEY (ID),
+FOREIGN KEY (project_id) REFERENCES project(ID) ON DELETE CASCADE,
+FOREIGN KEY (user_id) REFERENCES user(ID) ON DELETE CASCADE
+);
+
+INSERT INTO user(name, surname, username, password, type) VALUES ("admin", "admin", "admin", "$2y$10$tJ/17e/XhbONEPfvng1p/uZRpvBfd2FvCZRZSAImvHbBa1urBt.du", "admin");
+INSERT INTO user(name, surname, username, password, type) VALUES ("user", "user", "user", "$2y$10$wEiZS/D.pIQYghaxJmOnju1AbMr1R5Z5aFh.doTnSXkW9rrHZW8fW", "simple");
+
+INSERT INTO project(title, category, submitted_date, description) VALUES ("Web App", "Web Development", "2021-01-10", "A web application for communication");
+INSERT INTO project(title, category, submitted_date, description) VALUES ("Game", "Software Development", "2020-01-10", "This is an adventure game");
+INSERT INTO project(title, category, submitted_date, description) VALUES ("Website", "Web Development", "2020-08-13", "This is a website");
+
+INSERT INTO project_member(project_id, user_id, role) VALUES (1, 1, "admin");
+INSERT INTO project_member(project_id, user_id, role) VALUES (1, 2, "manager");
+INSERT INTO project_member(project_id, user_id, role) VALUES (2, 1, "admin");
